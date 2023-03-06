@@ -11,7 +11,6 @@ DINO_RUNNING = "running"
 DINO_JUMPING = "jumping"
 DINO_DUCKING = "ducking"
 
-
 class Dinosaur(Sprite):
     POSITION_X = 80
     POSITION_Y = 310
@@ -26,8 +25,6 @@ class Dinosaur(Sprite):
         self.action = DINO_RUNNING
         self.jump_velocity = self.JUMP_VELOCITY
         
-
-
     def update(self, user_input):
         if self.action == DINO_RUNNING:
             self.run()
@@ -47,7 +44,6 @@ class Dinosaur(Sprite):
 
             else:
                 self.action = DINO_RUNNING
-
 
     def run(self):
         self.image = RUNNING[self.step // 5] 
@@ -72,10 +68,6 @@ class Dinosaur(Sprite):
         self.step += 1
         if self.step >= 10:
             self.step = 0
-
-
-
-
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
