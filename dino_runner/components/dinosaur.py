@@ -68,7 +68,7 @@ class Dinosaur(Sprite):
 
     def ducking(self):
         self.rect.y = self.POSITION_Y + RUNNING_HEIGHT - DUCKING_HEIGHT
-        self.image = DUCKING[self.step // 5] 
+        self.image = DUCKING[self.step // 5]
         self.step += 1
         if self.step >= 10:
             self.step = 0
