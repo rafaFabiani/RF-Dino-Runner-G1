@@ -18,6 +18,4 @@ class Bird(Obstacle):
         self.step += 1
         if self.step >= 10:
             self.step = 0
-        self.rect.x -= game_speed
-        if self.rect.x < -self.rect.width:
-            obstacles.remove(self)
+        super().update(game_speed, obstacles)
