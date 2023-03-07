@@ -5,7 +5,6 @@ from dino_runner.utils.constants import BIRD, SCREEN_HEIGHT, SCREEN_WIDTH
 class Bird(Obstacle):
     def __init__(self):
         self.image = BIRD[0]
-        self.type = "bird"
         self.step = 0
         self.BIRD_Y = random.randint(200, (SCREEN_HEIGHT - 325))
         self.rect = self.image.get_rect()
