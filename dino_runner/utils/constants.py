@@ -72,4 +72,4 @@ HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 
 DEFAULT_TYPE = "default"
 
-FONT_STYLE = "dino_runner/assets/Fonts/8-BITWONDER.TTF"
+FONT_STYLE = "dino_runner/assets/Fonts/8bitFont.ttf"

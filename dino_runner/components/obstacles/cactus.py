@@ -1,6 +1,6 @@
 import random
 from dino_runner.components.obstacles.osbtacle import Obstacle
-from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS, BIRD
+from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS
 
 
 class SmallCactus(Obstacle):

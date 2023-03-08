@@ -1,4 +1,5 @@
 import pygame
+from dino_runner.components.text import MenuText
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.score import Score
@@ -22,7 +23,7 @@ class Game:
         self.obstacle_manager = ObstacleManager()
         self.score = Score()
         self.death_count = 0
-        
+
     def run(self):
         self.executing = True
         while self.executing:
@@ -35,6 +36,8 @@ class Game:
         # Game loop: events - update - draw
         self.obstacle_manager.reset()
         self.playing = True
+        self.score.reset()
+        self.game_speed = 20
         while self.playing:
             self.events()
             self.update()
@@ -78,15 +81,16 @@ class Game:
         half_screen_width = SCREEN_WIDTH // 2
         half_screen_height = SCREEN_HEIGHT // 2
         if not self.death_count:
-            font = pygame.font.Font(FONT_STYLE, 32)
-            text = font.render("Press space to start", False, (0, 0, 0))
-            text_rect = text.get_rect()
-            text_rect.center = (half_screen_width, half_screen_height)
-            self.screen.blit(text, text_rect)
+            text = MenuText("Press space to start", 32) 
+            text.draw(self.screen, half_screen_width, half_screen_height)
         else:
-            pass
+            text = MenuText("Press space to start again", 32)
+            text.draw(self.screen, half_screen_width, half_screen_height)
+            death_counter = MenuText(f"Death count: {self.death_count}", 24)
+            death_counter.draw(self.screen, half_screen_width, half_screen_height + 40)
+            score_text = MenuText(f"Your score on this run was: {self.score.score}", 24)
+            score_text.draw(self.screen, half_screen_width, half_screen_height + 200)
         self.screen.blit(DINO_START, (half_screen_width - 40, half_screen_height - 140))
-        
         pygame.display.update()
         self.handle_menu_events()
 
@@ -100,8 +104,7 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     self.start_game()
-
-
+                    
 
 
     
