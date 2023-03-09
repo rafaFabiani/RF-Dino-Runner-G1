@@ -2,8 +2,9 @@ import pygame
 from dino_runner.components.text import MenuText
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 from dino_runner.components.score import Score
-from dino_runner.utils.constants import BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DINO_START 
+from dino_runner.utils.constants import BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, SHIELD_TYPE, TITLE, FPS, DINO_START 
 
 
 class Game:
@@ -21,6 +22,7 @@ class Game:
         self.executing = False
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+        self.power_up_manager = PowerUpManager()
         self.score = Score()
         self.death_count = 0
 
@@ -52,6 +54,7 @@ class Game:
         self.user_input = pygame.key.get_pressed()
         self.player.update(self.user_input)
         self.obstacle_manager.update(self.game_speed, self.player, self.on_death)
+        self.power_up_manager.update(self.game_speed, self.score.score, self.player)
         self.score.update(self)
 
     def draw(self):
@@ -60,6 +63,8 @@ class Game:
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
+        self.player.check_power_up(self.screen)
         self.score.draw(self.screen)
         pygame.display.flip()
 
@@ -73,8 +78,11 @@ class Game:
         self.x_pos_bg -= self.game_speed
     
     def on_death(self):
-        self.playing = False
-        self.death_count += 1
+        is_invincible = self.player.type == SHIELD_TYPE
+        if not is_invincible:
+            pygame.time.delay(1000)
+            self.playing = False
+            self.death_count += 1
 
     def show_menu(self):
         self.screen.fill((255, 255, 255))
