@@ -3,8 +3,9 @@ from dino_runner.components.text import MenuText
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
+from dino_runner.components.clouds.cloud_manager import CloudManager
 from dino_runner.components.score import Score
-from dino_runner.utils.constants import BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, SHIELD_TYPE, TITLE, FPS, DINO_START 
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, SHIELD_TYPE, TITLE, FPS, DINO_START, DEFAULT_TYPE
 
 
 class Game:
@@ -23,6 +24,7 @@ class Game:
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
+        self.cloud_manager = CloudManager()
         self.score = Score()
         self.death_count = 0
 
@@ -37,6 +39,7 @@ class Game:
     def start_game(self):
         # Game loop: events - update - draw
         self.obstacle_manager.reset()
+        self.player.reset()
         self.playing = True
         self.score.reset()
         self.game_speed = 20
@@ -52,15 +55,17 @@ class Game:
 
     def update(self):
         self.user_input = pygame.key.get_pressed()
-        self.player.update(self.user_input)
+        self.player.update(self.user_input, self)
         self.obstacle_manager.update(self.game_speed, self.player, self.on_death)
-        self.power_up_manager.update(self.game_speed, self.score.score, self.player)
+        self.power_up_manager.update(self.game_speed, self.score.score, self.player, self)
+        self.cloud_manager.update(self.game_speed, self.score.score)
         self.score.update(self)
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
+        self.cloud_manager.draw(self.screen)
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.power_up_manager.draw(self.screen)
@@ -76,7 +81,7 @@ class Game:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
-    
+
     def on_death(self):
         is_invincible = self.player.type == SHIELD_TYPE
         if not is_invincible:
