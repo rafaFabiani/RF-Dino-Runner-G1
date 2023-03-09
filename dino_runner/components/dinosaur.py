@@ -62,6 +62,9 @@ class Dinosaur(Sprite):
             if self.hammer.throw:
                 self.hammer.update_throw(self, game)
 
+            if self.hammer.rect.x > SCREEN_WIDTH:
+                self.hammer.throw = False
+
     def run(self):
         self.image = RUN_IMG[self.type][self.step // 5] 
         self.rect.y = self.POSITION_Y
@@ -109,7 +112,7 @@ class Dinosaur(Sprite):
                 self.type = DEFAULT_TYPE
                 self.power_up_time_up = 0
 
-        elif self.type == HAMMER_TYPE:
+        elif self.type == HAMMER_TYPE and self.hammer_qtty > 0:
             text = MenuText(f"{self.hammer_qtty} {self.type.capitalize()}(S), left", 16)
             text.draw(screen, SCREEN_WIDTH // 2, 50)
 

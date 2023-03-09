@@ -12,13 +12,16 @@ class Hammer(PowerUp):
     
     def update_throw(self, dinosaur, game):
         self.rect.x += 2
-        self.rect.y += 1
-        if dinosaur.hammer_qtty > 0:
+        self.rect.y = dinosaur.rect.y 
+        if dinosaur.hammer_qtty < 0:
             dinosaur.type = DEFAULT_TYPE       
         else:
             dinosaur.type = HAMMER_TYPE
         
-        if self.rect.y < 330:
-            game.power_up_manager.power_ups.remove(self)
+        for obstacle in game.obstacle_manager.obstacles:
+            if self.rect.colliderect(obstacle):
+                game.obstacle_manager.obstacles.remove(obstacle)
+
+        self.draw(game.screen)
 
 
